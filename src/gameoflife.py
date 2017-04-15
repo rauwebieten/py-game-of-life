@@ -8,6 +8,10 @@ class Map:
         self.map = np.zeros((self.height, self.width), dtype=np.int16)
         self.current_step = 1
 
+    def clear(self):
+        self.map = np.zeros((self.height, self.width), dtype=np.int16)
+        self.current_step = 1
+
     def step(self):
         new_map = np.zeros((self.height, self.width), dtype=np.int16)
         for yi in range(self.height):
@@ -37,16 +41,28 @@ class Map:
 
 
 class CanvasRenderer:
-    def __init__(self, canvas):
+    def __init__(self, canvas, the_map):
         self.canvas = canvas
-        self.cell_size = 10
+        self.cell_size = 5
+        self.map = the_map
 
-    def render(self, the_map):
-        self.canvas.config(width=the_map.width * self.cell_size, height=the_map.height * self.cell_size)
+        self.canvas.bind('<Button-1>', self.on_cell_click)
+
+    def on_cell_click(self, event):
+        x = event.x // self.cell_size
+        y = event.y // self.cell_size
+        self.toggle_cell(x, y)
+
+    def toggle_cell(self, x, y):
+        self.map.map[y][x] = 1 - self.map.map[y][x]
+        self.render()
+
+    def render(self):
+        self.canvas.config(width=self.map.width * self.cell_size, height=self.map.height * self.cell_size)
         self.canvas.delete("all")
-        for yi in range(the_map.height):
-            for xi in range(the_map.width):
-                value = the_map.map[yi][xi]
+        for yi in range(self.map.height):
+            for xi in range(self.map.width):
+                value = self.map.map[yi][xi]
                 if value == 1:
                     self.canvas.create_rectangle(xi * self.cell_size, yi * self.cell_size,
                                                  xi * self.cell_size + self.cell_size,

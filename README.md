@@ -1,4 +1,4 @@
-# Conway's game of line
+# Conway's game of life
 
 requirements:
 numpy

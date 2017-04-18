@@ -34,6 +34,12 @@ def clear_action():
     renderer.render()
 
 
+def autorun_action():
+    if autorun:
+        step_action()
+    window.after(1,autorun_action)
+
+
 button_step = tk.Button(window, text='step', command=step_action)
 button_start = tk.Button(window, text='start', command=start_action)
 button_stop = tk.Button(window, text='stop', command=stop_action)
@@ -45,8 +51,5 @@ button_stop.grid(row=0, column=4)
 button_clear.grid(row=0, column=5)
 canvas.grid(row=1, column=0, columnspan=6)
 
-while True:
-    if autorun:
-        step_action()
-    window.update_idletasks()
-    window.update()
+autorun_action()
+window.mainloop()

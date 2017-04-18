@@ -1,1 +1,4 @@
-Work in progress
+# Conway's game of line
+
+requirements:
+numpy
